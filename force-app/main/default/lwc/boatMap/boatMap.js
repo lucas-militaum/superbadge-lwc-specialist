@@ -1,5 +1,4 @@
 // import BOATMC from the message channel
-import BOATMC from '@salesforce/messageChannel/boatMessageChannel';
 
 // Declare the const LONGITUDE_FIELD for the boat's Longitude__s
 // Declare the const LATITUDE_FIELD for the boat's Latitude

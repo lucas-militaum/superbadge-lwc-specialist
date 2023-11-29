@@ -43,9 +43,9 @@ export default class BoatSearchResults extends LightningElement {
   
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
-  async refresh() { 
+  async refresh() {
+    this.isLoading(true);
     await refreshApex(this.boats);
-    this.isLoading(false);
   }
   
   // this function must update selectedBoatId and call sendMessageService
@@ -65,7 +65,6 @@ export default class BoatSearchResults extends LightningElement {
   // clear lightning-datatable draft values
   handleSave(event) {
     // notify loading
-    this.isLoading(true);
     const updatedFields = event.detail.draftValues;
     // Update the records via Apex
     updateBoatList({data: updatedFields})
@@ -73,12 +72,16 @@ export default class BoatSearchResults extends LightningElement {
         this.refresh();
         this.showToast(SUCCESS_TITLE, MESSAGE_SHIP_IT);
     })
-    .catch(error => { this.showToast(ERROR_TITLE, ERROR_VARIANT); })
-    .finally(() => {});
+    .catch(error => { console.error(error); this.showToast(ERROR_TITLE, ERROR_VARIANT); })
+    .finally(() => {this.isLoading(false);});
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
-  notifyLoading(isLoading) { 
+  notifyLoading(isLoading) {
     this.isLoading = isLoading;
+    if (isLoading) {
+      this.dispatchEvent(new CustomEvent('loading'));
+    }
+    this.dispatchEvent(new CustomEvent('doneloading'));
   }
 
   showToast(title, message) {
