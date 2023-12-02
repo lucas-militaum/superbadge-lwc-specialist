@@ -18,7 +18,7 @@
       </lightning-tab>
       <lightning-tab label="Boat Editor">
         <!-- Scrollable div and lightning datatable go here -->
-        <lightning-datatable key-field="Id" data={boats.data} columns={columns} onsave={handleSave} hide-checkbox-column>
+        <lightning-datatable key-field="Id" data={boats.data} columns={columns} onsave={handleSave} draft-values={draftValues} hide-checkbox-column>
 
         </lightning-datatable>
       </lightning-tab>

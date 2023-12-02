@@ -9,7 +9,7 @@
           </actions>
           <p class="slds-var-p-horizontal_small">
             <!-- boatSearchForm component goes here -->
-            <c-boat-search-form></c-boat-search-form>
+            <c-boat-search-form onsearch={searchBoats}></c-boat-search-form>
           </p>
         </lightning-card>
       </lightning-layout-item>
@@ -20,7 +20,7 @@
             <lightning-spinner alternative-text="Loading"></lightning-spinner>
         </div>
         <!-- boatSearchResults goes here -->
-        <c-boat-search-results></c-boat-search-results>
+        <c-boat-search-results boat-type-id={boatTypeId}></c-boat-search-results>
         <!-- onloading={handleLoading} ondoneloading={handleDoneLoading} -->
       </lightning-layout-item>
     </lightning-layout>
