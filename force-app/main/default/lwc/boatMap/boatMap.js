@@ -42,6 +42,7 @@ export default class BoatMap extends LightningElement {
     // Error handling
     console.log('WIRED RECORD BOAT MAP');
     if (data) {
+      console.log('WIRED RECORD BOAT MAP data: ' + JSON.stringify(data));
       this.error = undefined;
       const longitude = data.fields.Geolocation__Longitude__s.value;
       const latitude = data.fields.Geolocation__Latitude__s.value;
@@ -74,7 +75,7 @@ export default class BoatMap extends LightningElement {
 
   // Creates the map markers array with the current boat's location for the map.
   updateMap(Longitude, Latitude) {
-    mapMarkers = [
+    this.mapMarkers = [
       {
         location: {
           Latitude: Latitude,
