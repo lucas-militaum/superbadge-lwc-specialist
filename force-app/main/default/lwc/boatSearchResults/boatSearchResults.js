@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from 'lightning/messageService';
@@ -14,12 +14,6 @@ const SUCCESS_VARIANT = 'success';
 const ERROR_TITLE = 'Error';
 const ERROR_VARIANT = 'error';
 
-// const COLUMNS = [
-//     { label: 'Name', fieldName: 'Name', type: 'text' },
-//     { label: 'Lenght', fieldName: 'Length__c', type: 'number' },
-//     { label: 'Price', fieldName: 'Price__c', type: 'currency' },
-//     { label: 'Description', fieldName: 'Description__c', type: 'text' },
-// ]
 export default class BoatSearchResults extends LightningElement {
   selectedBoatId;
   columns = [
@@ -29,9 +23,10 @@ export default class BoatSearchResults extends LightningElement {
     { label: 'Description', fieldName: 'Description__c', type: 'text', editable: true }
   ];
   boatTypeId = '';
+  @track
   boats;
   isLoading = false;
-  //my variables
+  @track
   draftValues = []
 
   // wired message context
@@ -57,6 +52,7 @@ export default class BoatSearchResults extends LightningElement {
 
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
+  @api
   async refresh() {
     this.isLoading = true;
     this.notifyLoading(this.isLoading);
@@ -88,11 +84,23 @@ export default class BoatSearchResults extends LightningElement {
     // Update the records via Apex
     updateBoatList({ data: updatedFields })
       .then(() => {
-        this.showToast(SUCCESS_TITLE, MESSAGE_SHIP_IT, SUCCESS_VARIANT);
+        const toastEvent = new ShowToastEvent({
+          title: SUCCESS_TITLE,
+          message: MESSAGE_SHIP_IT,
+          variant: SUCCESS_VARIANT
+        });
+        this.dispatchEvent(toastEvent);
         this.draftValues = [];
         return this.refresh();
       })
-      .catch(error => { this.showToast(ERROR_TITLE, error.message, ERROR_VARIANT); })
+      .catch(error => { 
+        const toastEvent = new ShowToastEvent({
+          title: ERROR_TITLE,
+          message: error.message,
+          variant: ERROR_VARIANT
+        });
+        this.dispatchEvent(toastEvent);
+      })
       .finally(() => { });
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
@@ -102,14 +110,5 @@ export default class BoatSearchResults extends LightningElement {
     } else {
       this.dispatchEvent(new CustomEvent('doneloading'));
     }
-  }
-
-  showToast(title, message, variant) {
-    const toastEvent = new ShowToastEvent({
-      title: title,
-      message: message,
-      variant: variant
-    });
-    this.dispatchEvent(toastEvent);
   }
 }
