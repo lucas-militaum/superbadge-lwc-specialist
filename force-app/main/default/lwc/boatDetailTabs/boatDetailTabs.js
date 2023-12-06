@@ -9,7 +9,9 @@ import BOATMC from '@salesforce/messageChannel/boatMessageChannel__c';
 // import labelDetails for Details
 import labelDetails from "@salesforce/label/c.Details";
 // import labelReviews for Reviews
+import labelReviews from "@salesforce/label/c.Reviews";
 // import labelAddReview for Add_Review
+import labelAddReview from "@salesforce/label/c.Add_Review";
 // import labelFullDetails for Full_Details
 import labelFullDetails from "@salesforce/label/c.Full_Details";
 // import labelPleaseSelectABoat for Please_select_a_boat
@@ -32,8 +34,8 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
 
     label = {
         labelDetails,
-        // labelReviews,
-        // labelAddReview,
+        labelReviews,
+        labelAddReview,
         labelFullDetails,
         labelPleaseSelectABoat
     };
@@ -82,5 +84,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
     }
 
     // Navigates back to the review list, and refreshes reviews component
-    handleReviewCreated() { }
+    handleReviewCreated() {
+        this.template.querySelector('lightning-tabset').activeTabValue = this.label.labelReviews;
+    }
 }
