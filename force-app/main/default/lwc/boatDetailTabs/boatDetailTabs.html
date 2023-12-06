@@ -10,7 +10,9 @@
         <lightning-tabset variant="scoped">
             <lightning-tab label={label.labelDetails}>
                 <lightning-card title={boatName} icon-name={detailsTabIconName}>
-
+                    <slot>
+                        <lightning-button label={label.labelFullDetails} onclick={navigateToRecordViewPage}></lightning-button>
+                    </slot>
                 </lightning-card>
             </lightning-tab>
         </lightning-tabset>
