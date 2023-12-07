@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { loadScript, loadStyle } from "lightning/platformResourceLoader";
 //import fivestar static resource, call it fivestar
 import fivestar from "@salesforce/resourceUrl/fivestar";
 // add constants here
@@ -36,9 +37,10 @@ export default class FiveStarRating extends LightningElement {
   //Method to load the 3rd party script and initialize the rating.
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
-  loadScript() {
+  async loadScript() {
     try {
-      fivestar;
+      await loadScript(this, fivestar + '/rating.js');
+      await loadStyle(this, fivestar + '/rating.css');
       this.initializeRating();
     } catch (error) {
       const toastEvent = new ShowToastEvent({
