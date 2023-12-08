@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { loadScript, loadStyle } from "lightning/platformResourceLoader";
 //import fivestar static resource, call it fivestar
@@ -11,18 +11,15 @@ const READ_ONLY_CLASS = 'readonly c-rating';
 
 export default class FiveStarRating extends LightningElement {
   //initialize public readOnly and value properties
-  readOnly;
-  value;
+  @api readOnly;
+  @api value;
 
   editedValue;
   isRendered;
 
   //getter function that returns the correct class depending on if it is readonly
   get starClass() {
-    if (this.readOnly) {
-      return READ_ONLY_CLASS;
-    }
-    return EDITABLE_CLASS;
+    return this.readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
   }
 
   // Render callback to load the script once the component renders.
@@ -37,20 +34,21 @@ export default class FiveStarRating extends LightningElement {
   //Method to load the 3rd party script and initialize the rating.
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
-  async loadScript() {
-    try {
-      await loadScript(this, fivestar + '/rating.js');
-      await loadStyle(this, fivestar + '/rating.css');
+  loadScript() {
+    Promise.all([
+      loadScript(this, fivestar + '/rating.js'),
+      loadStyle(this, fivestar + '/rating.css')      
+    ]).then(() => {
       this.initializeRating();
-    } catch (error) {
-      const toastEvent = new ShowToastEvent({
-        title: ERROR_TITLE,
-        message: error.message,
-        variant: ERROR_VARIANT
+    })
+    .catch(error => {
+      const toast = new ShowToastEvent({
+          title: ERROR_TITLE,
+          message: error.message,
+          variant: ERROR_VARIANT,
       });
-      this.dispatchEvent(toastEvent);
-    }
-
+      this.dispatchEvent(toast);
+    });
   }
 
   initializeRating() {
