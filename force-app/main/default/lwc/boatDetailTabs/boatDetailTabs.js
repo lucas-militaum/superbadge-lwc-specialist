@@ -42,7 +42,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
 
     // Decide when to show or hide the icon
     // returns 'utility:anchor' or null
-    get detailsTabIconName() { 
+    get detailsTabIconName() {
         if (this.wiredRecord.data) {
             return 'utility:anchor'
         }
@@ -50,7 +50,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
     }
 
     // Utilize getFieldValue to extract the boat name from the record wire
-    get boatName() { 
+    get boatName() {
         return getFieldValue(this.wiredRecord.data, BOAT_NAME_FIELD);
     }
 
@@ -67,12 +67,12 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
     }
 
     // Calls subscribeMC()
-    connectedCallback() { 
+    connectedCallback() {
         this.subscribeMC();
     }
 
     // Navigates to record page
-    navigateToRecordViewPage() { 
+    navigateToRecordViewPage() {
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
@@ -86,5 +86,6 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
     // Navigates back to the review list, and refreshes reviews component
     handleReviewCreated() {
         this.template.querySelector('lightning-tabset').activeTabValue = this.label.labelReviews;
+        this.template.querySelector('c-boat-reviews').refresh();
     }
 }
