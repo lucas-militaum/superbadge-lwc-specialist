@@ -11,12 +11,15 @@ export default class SimilarBoats extends NavigationMixin(LightningElement) {
     error;
 
     // public
+    @api
     get recordId() {
         // returns the boatId
+        return this.boatId;
     }
     set recordId(value) {
         // sets the boatId value
         // sets the boatId attribute
+        this.boatId = value;
     }
 
     // public
